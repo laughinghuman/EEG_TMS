@@ -174,6 +174,7 @@ def find_false_spikes(path_to_eeg, path_tables):
                 # j += 1
                 # else:
                 # print('false')
+                # print ('true')
             elif order_eeg[i] == 2 and order_table[i-j] == 1 and (0 == i):
                 j += 1
             elif ((order_eeg[i] == 2 and order_eeg[i - 1] == 1) and (i != 0)) and (
