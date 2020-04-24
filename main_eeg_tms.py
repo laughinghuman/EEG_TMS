@@ -9,23 +9,25 @@ import numpy as np
 import useful_notations
 from spikes_events import create_events
 from classification import predict_perceptron, predict_svm
+from visualization import plot_results, plot_mean_topomaps
 
 class EegPower:
-    def __init__(self, path_to_files):
+    def __init__(self, path_to_files, path_to_folder):
         powers, epochs = [], []
-        files = [f for f in sorted(os.listdir(path_to_files))]
-        for ind, path in enumerate(files):
+        files_eeg = [f for f in sorted(os.listdir(path_to_files))]
+        files_events = []
+        for ind, path in enumerate(files_eeg):
             raw = self._read_raw_with_annotations(path_to_files + '/{0}'.format(path))
-            del raw
             events = create_events(raw)
             epoch = self._create_epochs(raw, events)
-            del events
             epochs.append(epoch)
             power = self._create_evoked(epoch)
             powers.append(power)
+        self.ch_names = raw.ch_names
         self.powers = powers
         self.epochs = epochs
-        del powers, epochs
+        self.path_for_save = path_to_folder
+        del powers, epochs, raw, events
 
     @staticmethod
     def _read_raw_with_annotations(path):
@@ -50,11 +52,16 @@ class EegPower:
         result = Results(self.powers)
         return result
     def save_powers(self, path_to_folder):
+        pass
+    def plot(self, path_to):
+
 
 
 class Results:
       def __init__(self, powers):
            self.perceptron = predict_perceptron(powers)
            self.svm = predict_svm(powers)
+      def plot(self, save = False):
+          plot_results([self.perceptron,self.svm], save)
 
 
