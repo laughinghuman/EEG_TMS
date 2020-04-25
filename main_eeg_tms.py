@@ -11,7 +11,7 @@ from spikes_events import create_events
 from classification import predict_perceptron, predict_svm
 from visualization import plot_results, plot_mean_topomaps
 
-class EegPower:
+class Eeg:
     def __init__(self, path_to_files, path_to_folder):
         powers, epochs = [], []
         files_eeg = [f for f in sorted(os.listdir(path_to_files))]
@@ -49,7 +49,7 @@ class EegPower:
                 X.append(psds_band.reshape(len(psds), -1))
             return np.concatenate(X, axis=1)
     def classification(self):
-        result = Results(self.powers)
+        result = Results(self.powers, self.path_for_save)
         return result
     def save_powers(self, path_to_folder):
         pass
@@ -58,9 +58,10 @@ class EegPower:
 
 
 class Results:
-      def __init__(self, powers):
+      def __init__(self, powers, path):
            self.perceptron = predict_perceptron(powers)
            self.svm = predict_svm(powers)
+           self.path_for_save = path
       def plot(self, save = False):
           plot_results([self.perceptron,self.svm], save)
 
