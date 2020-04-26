@@ -24,7 +24,7 @@ class Eeg:
             events = create_events(raw)
             epoch = self._create_epochs(raw, events)
             epochs.append(epoch)
-            power = self._compute_power(epoch)
+            power = Power(epoch)
             powers.append(power)
         self.ch_names = ch_names
         self.powers = powers
@@ -54,7 +54,7 @@ class Eeg:
     def plot(self, path_to):
         pass
 
-
+# class fo making plots for results of classification
 class Results:
     def __init__(self, powers, path):
         self.perceptron = predict_perceptron(powers)
@@ -67,13 +67,16 @@ class Results:
 # class fo key accessing the Powers
 class Power:
     def __init__(self, epochs):
-        def _compute_power(epochs):
-            bands = useful_notations.bands
-    bands = useful_notations.bands
-    psds, freqs = psd_multitaper(epochs)
-    psds /= np.sum(psds, axis=-1, keepdims=True)
-    X = []
-    for fmin, fmax in bands.values():
-        psds_band = psds[:, :, (freqs >= fmin) & (freqs < fmax)].mean(axis=-1)
-        X.append(psds_band.reshape(len(psds), -1))
-    return np.concatenate(X, axis=1)
+        bands = useful_notations.bands
+        psds, freqs = psd_multitaper(epochs)
+        psds /= np.sum(psds, axis=-1, keepdims=True)
+        x = []
+        for fmin, fmax in bands.values():
+            psds_band = psds[:, :, (freqs >= fmin) & (freqs < fmax)].mean(axis=-1)
+            x.append(psds_band.reshape(len(psds), -1))
+         np.concatenate(x, axis=1)
+    # create key accessing
+    def __setitem__(self, key, data):
+              self._power[key] = data
+    def __getitem__(self, key):
+        

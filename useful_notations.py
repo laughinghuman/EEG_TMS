@@ -26,3 +26,4 @@ event_dict = {'ph/bil/p/cv/true/stim/match': 1, 'ph/bil/p/cv/true/stim/not_match
               'ph/den/d/vc/false/stim/match': 45,
               'ph/den/d/vc/false/stim/not_match': 46, 'ph/den/d/vc/true/no_stim': 47, 'ph/den/d/vc/false/no_stim': 48,
               'wrd/sense/stim': 49, 'wrd/no_sense/stim': 50, 'wrd/sense/no_stim': 51, 'wrd/no_sense/no_stim': 52}
+event_list_ext = ['ph/bil', 'ph/den', 'ph/bil/p', 'ph/bil/b', 'ph/den/t', 'ph/den/d']
