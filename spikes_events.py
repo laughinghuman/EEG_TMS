@@ -6,16 +6,21 @@ import pandas as pd
 
 
 # some useful functions
-chan = 0
-peaks_ind = []
-for i in range(eeg.n_times-2):
-    if  (eeg[chan,i+1][0][0][0] - eeg[chan,i][0][0][0])<0 and (eeg[chan,i+2][0][0][0]-eeg[chan,i+1][0][0][0])>0:
-        peaks_ind.append(i+1)
-ind_spikes  = []
-for i in range(len(peaks_ind)):
-    if (eeg[chan,peaks_ind[i]][0][0][0])<(-1e-2):
-        ind_spikes.append(peaks_ind[i])
-path = '/Users/ilamiheev/Downloads/Sat19540'
+# need raw file
+# function for finding spikes
+def find_spikes(eeg):
+    chan = 0
+    n_times = eeg.n_times
+    ind_spikes = []
+    eeg = eeg[...][0][0][0]
+    for iter_var in range(n_times - 2):
+        if (eeg[chan, iter_var + 1] - eeg[chan, iter_var]) < 0 < (eeg[chan, iter_var + 2] - eeg[chan, iter_var + 1]):
+            # need to check it twice (problem after converting to .set)
+            if eeg[chan, iter_var + 1] < (-1e-2):
+                ind_spikes.append(iter_var + 1)
+    return ind_spikes
+
+
 files = [f for f in sorted(os.listdir(path))]
 m = 0
 tasks = []
@@ -89,8 +94,8 @@ def func_a(k, llll, b, min_del):
 def func_b(mm, f2, n, m):
     ind_f1, ind_f2 = [y for y, e in enumerate(f2) if e == 2], [y for y, e in enumerate(mm) if e == 2]
     print(n)
-    #print(mm)
-    #$print(f2)
+    # print(mm)
+    # $print(f2)
     st1 = ((ind_f2[ind_f2.index(n) + 1] - ind_f2[ind_f2.index(n) - 1]) - 1)
     print('m =', m)
     print(len(ind_f1))
@@ -115,6 +120,7 @@ def func_c(f):
 # find right order of spike pairs
 def create_events(raw):
     return raw
+
 
 def find_false_spikes(path_to_eeg, path_tables):
     file = mne.io.read_raw_eeglab(path_to_eeg, preload=True)
@@ -141,11 +147,11 @@ def find_false_spikes(path_to_eeg, path_tables):
         order_eeg, eeg_delays = func_a(spikes_delays, llll, b, min_del)
         fin_list_1 = []
         if len(order_eeg) < len(order_table):
-            #and g < (len(paths) - 1):
+            # and g < (len(paths) - 1):
             tau, _ = func_a(spikes_delays, b + 1, b + 2 + len(order_table) - len(order_eeg), min_del)
             order_eeg.extend(tau)
-        #elif len(order_eeg) < len(order_table) and g == (len(paths) - 1):
-            #order_eeg.append(1)
+        # elif len(order_eeg) < len(order_table) and g == (len(paths) - 1):
+        # order_eeg.append(1)
         ind_f = [y for y, e in enumerate(order_table) if e == 2]
         for i in range(len(order_table)):
             if order_eeg[i] == 1 and order_table[i - j] == 1:
@@ -175,7 +181,7 @@ def find_false_spikes(path_to_eeg, path_tables):
                 # else:
                 # print('false')
                 # print ('true')
-            elif order_eeg[i] == 2 and order_table[i-j] == 1 and (0 == i):
+            elif order_eeg[i] == 2 and order_table[i - j] == 1 and (0 == i):
                 j += 1
             elif ((order_eeg[i] == 2 and order_eeg[i - 1] == 1) and (i != 0)) and (
                     (order_table[i - j] == 1) and func_b(order_eeg, order_table, i, i - j)) != 0:

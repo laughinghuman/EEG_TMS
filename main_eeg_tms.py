@@ -37,7 +37,6 @@ class Eeg:
         raw = mne.io.read_raw_eeglab(path, preload=True)
         return raw
 
-
     @staticmethod
     def _create_epochs(raw, events):
         epoch = mne.Epochs(raw, events=events, event_id=useful_notations.event_dict, tmin=-0.05, tmax=0.05,
@@ -54,6 +53,7 @@ class Eeg:
     def plot(self, path_to):
         pass
 
+
 # class fo making plots for results of classification
 class Results:
     def __init__(self, powers, path):
@@ -64,19 +64,22 @@ class Results:
     def plot(self, save=False):
         plot_results([self.perceptron, self.svm], save)
 
+
 # class fo key accessing the Powers
 class Power:
     def __init__(self, epochs):
         bands = useful_notations.bands
-        psds, freqs = psd_multitaper(epochs)
-        psds /= np.sum(psds, axis=-1, keepdims=True)
-        x = []
-        for fmin, fmax in bands.values():
-            psds_band = psds[:, :, (freqs >= fmin) & (freqs < fmax)].mean(axis=-1)
-            x.append(psds_band.reshape(len(psds), -1))
-         np.concatenate(x, axis=1)
+        events_list = useful_notations.event_list_ext
+        for _, k in enumerate(events_list):
+            psds, freqs = psd_multitaper(epochs[k])
+            psds /= np.sum(psds, axis=-1, keepdims=True)
+            x = []
+            for fmin, fmax in bands.values():
+                psds_band = psds[:, :, (freqs >= fmin) & (freqs < fmax)].mean(axis=-1)
+                x.append(psds_band.reshape(len(psds), -1))
+            np.concatenate(x, axis=1)
+            self.__dict__[k] = x
+
     # create key accessing
-    def __setitem__(self, key, data):
-              self._power[key] = data
     def __getitem__(self, key):
-        
+        return self.key
