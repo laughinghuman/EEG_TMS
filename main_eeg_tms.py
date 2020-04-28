@@ -14,12 +14,12 @@ from visualization import plot_results, plot_mean_topomaps
 
 # EEG class for epochs and power estimation
 class Eeg:
-    def __init__(self, path_to_files, path_to_folder):
+    def __init__(self, path_to_set, path_to_txt, path_to_folder):
         powers, epochs = [], []
-        files_eeg = [f for f in sorted(os.listdir(path_to_files))]
-        files_events = []
+        files_eeg, files_events = [f for f in sorted(os.listdir(path_to_set))], [f for f in
+                                                                                 sorted(os.listdir(path_to_txt))]
         for ind, path in enumerate(files_eeg):
-            raw = self._read_raw_with_annotations(path_to_files + '/{0}'.format(path))
+            raw = self._read_raw_with_annotations(path_to_set + '/{0}'.format(path))
             ch_names = raw.ch_names
             events = create_events(raw)
             epoch = self._create_epochs(raw, events)

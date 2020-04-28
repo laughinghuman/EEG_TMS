@@ -93,15 +93,7 @@ def func_a(k, llll, b, min_del):
 
 def func_b(mm, f2, n, m):
     ind_f1, ind_f2 = [y for y, e in enumerate(f2) if e == 2], [y for y, e in enumerate(mm) if e == 2]
-    print(n)
-    # print(mm)
-    # $print(f2)
     st1 = ((ind_f2[ind_f2.index(n) + 1] - ind_f2[ind_f2.index(n) - 1]) - 1)
-    print('m =', m)
-    print(len(ind_f1))
-    print(len(list(filter(lambda a: a > m, ind_f1))))
-    print(len(list(filter(lambda a: a < m, ind_f1))))
-    print(ind_f1)
     st2 = (list(filter(lambda a: a > m, ind_f1)))[0] - (list(filter(lambda a: a < m, ind_f1)))[-1]
     return st1 - st2
 
