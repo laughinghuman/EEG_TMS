@@ -1,9 +1,6 @@
 # lib import
-import math
 import os
-import re
 import mne
-import pandas as pd
 from mne.time_frequency import psd_multitaper
 import numpy as np
 import useful_notations
@@ -12,10 +9,11 @@ from classification import predict_perceptron, predict_svm
 from visualization import plot_results, plot_mean_topomaps
 
 
-# EEG class for epochs and power estimation
+# EEG class for epochs and power estimation. Instance of epochs
 class Eeg:
     def __init__(self, path_to_set, path_to_txt, path_to_folder):
         powers, epochs = [], []
+        # create two lists with .set and .txt files names
         files_eeg, files_events = [f for f in sorted(os.listdir(path_to_set))], [f for f in
                                                                                  sorted(os.listdir(path_to_txt))]
         for ind, path in enumerate(files_eeg):

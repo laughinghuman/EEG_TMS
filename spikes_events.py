@@ -12,11 +12,12 @@ def find_spikes(eeg):
     chan = 0
     n_times = eeg.n_times
     ind_spikes = []
-    eeg = eeg[...][0][0][0]
+    data, _ = eeg[chan, :]
     for iter_var in range(n_times - 2):
-        if (eeg[chan, iter_var + 1] - eeg[chan, iter_var]) < 0 < (eeg[chan, iter_var + 2] - eeg[chan, iter_var + 1]):
+        if (data[iter_var + 1] - data[iter_var]) < 0 < (
+                data[iter_var + 2] - data[iter_var + 1]):
             # need to check it twice (problem after converting to .set)
-            if eeg[chan, iter_var + 1] < (-1e-2):
+            if data[iter_var + 1] < (-1e-2):
                 ind_spikes.append(iter_var + 1)
     return ind_spikes
 
