@@ -1,5 +1,5 @@
 from matplotlib import pyplot as plt
-
+# write functions for visualization
 
 def plot_results(results, save):
     if save:
